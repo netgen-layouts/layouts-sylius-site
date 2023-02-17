@@ -78,7 +78,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": false,
             "phpstan/extension-installer": false,
             "symfony/thanks": false,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "*": false
         }
     },
     "extra": {
