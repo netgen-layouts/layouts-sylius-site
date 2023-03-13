@@ -93,7 +93,7 @@ RUN set -eux; \
 	;
 
 # prevent the reinstallation of vendors at every changes in the source code
-COPY package.json yarn.lock ./
+COPY package.json yarn.* ./
 RUN set -eux; \
     yarn install; \
     yarn cache clean
@@ -148,9 +148,11 @@ RUN set -eux; \
 	;
 
 COPY docker/cron/crontab /etc/crontabs/root
+COPY docker/cron/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN chmod +x /usr/local/bin/docker-entrypoint
 
-ENTRYPOINT ["crond"]
-CMD ["-f"]
+ENTRYPOINT ["docker-entrypoint"]
+CMD ["crond", "-f"]
 
 FROM sylius_php_prod AS sylius_migrations_prod
 
