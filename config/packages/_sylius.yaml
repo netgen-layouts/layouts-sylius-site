@@ -1,18 +1,14 @@
 imports:
     - { resource: "@SyliusCoreBundle/Resources/config/app/config.yml" }
-
+    - { resource: "@SyliusPayumBundle/Resources/config/app/config.yaml" }
     - { resource: "@SyliusAdminBundle/Resources/config/app/config.yml" }
+    - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
     - { resource: "@SyliusApiBundle/Resources/config/app/config.yaml" }
 
-    - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
-    - { resource: "@SyliusPayPalPlugin/Resources/config/config.yaml" }
+    - { resource: "../parameters.yaml" }
 
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'
-
-when@dev:
-    sylius_api:
-        enabled: true
 
 sylius_addressing:
     resources:
@@ -50,8 +46,12 @@ sylius_channel:
         channel:
             classes:
                 model: App\Entity\Channel\Channel
+
 sylius_core:
     resources:
+        avatar_image:
+            classes:
+                model: App\Entity\User\AvatarImage
         product_image:
             classes:
                 model: App\Entity\Product\ProductImage
@@ -64,6 +64,15 @@ sylius_core:
         channel_pricing:
             classes:
                 model: App\Entity\Channel\ChannelPricing
+        channel_price_history_config:
+            classes:
+                model: App\Entity\Channel\ChannelPriceHistoryConfig
+        channel_pricing_log_entry:
+            classes:
+                model: App\Entity\Channel\ChannelPricingLogEntry
+        shop_billing_data:
+            classes:
+                model: App\Entity\Channel\ShopBillingData
 
 sylius_currency:
     resources:
@@ -118,15 +127,18 @@ sylius_payment:
         payment:
             classes:
                 model: App\Entity\Payment\Payment
+        payment_request:
+            classes:
+                model: App\Entity\Payment\PaymentRequest
+        gateway_config:
+            classes:
+                model: App\Entity\Payment\GatewayConfig
 
 sylius_payum:
     resources:
         payment_security_token:
             classes:
                 model: App\Entity\Payment\PaymentSecurityToken
-        gateway_config:
-            classes:
-                model: App\Entity\Payment\GatewayConfig
 
 sylius_product:
     resources:
@@ -169,6 +181,9 @@ sylius_promotion:
         catalog_promotion:
             classes:
                 model: App\Entity\Promotion\CatalogPromotion
+            translation:
+                classes:
+                    model: App\Entity\Promotion\CatalogPromotionTranslation
         catalog_promotion_action:
             classes:
                 model: App\Entity\Promotion\CatalogPromotionAction
@@ -178,6 +193,9 @@ sylius_promotion:
         promotion:
             classes:
                 model: App\Entity\Promotion\Promotion
+            translation:
+                classes:
+                    model: App\Entity\Promotion\PromotionTranslation
         promotion_rule:
             classes:
                 model: App\Entity\Promotion\PromotionRule
@@ -206,6 +224,9 @@ sylius_shipping:
             translation:
                 classes:
                     model: App\Entity\Shipping\ShippingMethodTranslation
+        shipping_method_rule:
+            classes:
+                model: App\Entity\Shipping\ShippingMethodRule
         shipping_category:
             classes:
                 model: App\Entity\Shipping\ShippingCategory
@@ -227,6 +248,7 @@ sylius_taxonomy:
             translation:
                 classes:
                     model: App\Entity\Taxonomy\TaxonTranslation
+
 sylius_user:
     resources:
         admin:
@@ -242,13 +264,18 @@ sylius_user:
                 classes:
                     model: App\Entity\User\UserOAuth
 
-sylius_shop:
-    product_grid:
-        include_all_descendants: true
+sylius_twig_hooks:
+    hooks:
+        'sylius_admin.base#stylesheets':
+            app_styles:
+                template: 'admin/stylesheets.html.twig'
+        'sylius_admin.base#javascripts':
+            app_javascripts:
+                template: 'admin/javascripts.html.twig'
 
-sylius_theme:
-    sources:
-        filesystem:
-            scan_depth: 1
-            directories:
-                - "%kernel.project_dir%/themes"
+        'sylius_shop.base#stylesheets':
+            app_styles:
+                template: 'shop/stylesheets.html.twig'
+        'sylius_shop.base#javascripts':
+            app_javascripts:
+                template: 'shop/javascripts.html.twig'

@@ -1,3 +1,2 @@
 netgen_layouts:
     pagelayout: '@NetgenLayoutsSylius/shop/base_layout.html.twig'
-    design: sylius

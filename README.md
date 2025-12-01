@@ -1,6 +1,10 @@
 <p align="center">
     <a href="https://sylius.com" target="_blank">
-        <img src="https://demo.sylius.com/assets/shop/img/logo.png" />
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://media.sylius.com/sylius-logo-800-dark.png">
+          <source media="(prefers-color-scheme: light)" srcset="https://media.sylius.com/sylius-logo-800.png">
+          <img alt="Sylius Logo." src="https://media.sylius.com/sylius-logo-800.png">
+        </picture>
     </a>
 </p>
 
@@ -16,7 +20,7 @@ Enjoy being an eCommerce Developer again!
 
 Powerful REST API allows for easy integrations and creating unique customer experience on any device.
 
-We're using full-stack Behavior-Driven-Development, with [phpspec](http://phpspec.net) and [Behat](http://behat.org)
+We're using full-stack Behavior-Driven-Development, with [Behat](http://behat.org)
 
 ## Documentation
 
@@ -36,35 +40,39 @@ $ symfony serve
 $ open http://localhost:8000/
 ```
 
-For more detailed instruction please visit [installation chapter in our docs](https://docs.sylius.com/en/1.10/book/installation/installation.html).
+For more detailed instruction about traditional way of running Sylius please visit [installation chapter in our docs](https://docs.sylius.com/the-book/sylius-ce-installation).
 
 ### Docker
 
-#### Development
+You can run Sylius and all associated infrastructure dependencies (PHP, Nginx, MySQL, Node) on your machine using only Docker containers. Make sure you have installed [Docker](https://docs.docker.com/get-docker/) on your local machine.
 
-Make sure you have installed [Docker](https://docs.docker.com/get-docker/) on your local machine.
-Execute `docker compose up -d` in your favorite terminal and wait some time until the services will be ready. You might want to see docker logs.
-Then enter `localhost` in your browser or execute `open localhost` in your terminal.
-
-#### Production
-
-The simplest way to deploy your Sylius store via Docker is via `docker-compose.prod.yml` configuration file.
-To do that you need to install [Docker](https://docs.docker.com/get-docker/) on your VPS and define `MYSQL_PASSWORD` environment.
-Then execute `docker compose -f docker-compose.prod.yml up -d` command in your terminal. The `MYSQL_PASSWORD` env will be automatically
-applied to the rest of the config.
-
-> When using a Virtual Private Server (VPS) we recommend having at least 2GB of RAM memory
-
-**Quick deploy:**
+**Option 1: Get the latest release**
 ```bash
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-
-export MYSQL_PASSWORD=SLyPJLaye7
-
-docker compose -f docker-compose.prod.yml up -d
-docker compose -f docker-compose.prod.yml exec php bin/console sylius:fixtures:load --no-interaction
+LATEST=$(curl -s https://api.github.com/repos/Sylius/Sylius-Standard/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
+curl -L -o sylius-latest.zip https://github.com/Sylius/Sylius-Standard/archive/refs/tags/$LATEST.zip
+unzip sylius-latest.zip
+cd Sylius-Standard-*
 ```
+
+**Option 2: List available versions**
+```bash
+curl -s https://api.github.com/repos/Sylius/Sylius-Standard/releases | grep '"tag_name"' | cut -d'"' -f4 | head -10
+```
+
+**Option 3: Get a specific version**
+```bash
+VERSION="v2.x.x"  # Replace with desired version
+curl -L -o sylius-$VERSION.zip https://github.com/Sylius/Sylius-Standard/archive/refs/tags/$VERSION.zip
+unzip sylius-$VERSION.zip
+cd Sylius-Standard-*
+```
+
+**Initialize the project (required for all options):**
+```bash
+make init
+```
+
+For more detailed instruction about Docker way of running Sylius please visit [Docker installation chapter in our docs](https://docs.sylius.com/getting-started-with-sylius/sylius-ce-installation-with-docker).
 
 ## Troubleshooting
 
